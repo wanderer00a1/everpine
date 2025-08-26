@@ -11,8 +11,15 @@ import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 import GlobalStyles from "./styles/GlobalStyles";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+});
 
 function App() {
   const router = createBrowserRouter([
@@ -61,6 +68,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
       <GlobalStyles />
       <RouterProvider router={router}></RouterProvider>
     </QueryClientProvider>
