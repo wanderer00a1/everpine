@@ -30,7 +30,7 @@ const TableHeader = styled.header`
 
 function CabinTable() {
   const { isPending, data: cabins } = useQuery({
-    queryKey: ["cabin"],
+    queryKey: ["cabins"],
     queryFn: getCabins,
   });
   if (isPending) return <Spinner />;
