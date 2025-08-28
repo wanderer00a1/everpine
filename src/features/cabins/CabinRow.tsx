@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 
-interface CabinProps {
-  id: number;
+export interface CabinProps {
+  id?: number;
   name: string;
   image: string;
   maxCapacity: number;
@@ -80,7 +80,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
       <div>{maxCapacity} guests</div>
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{formatCurrency(discount)}</Discount>
-      <button onClick={() => mutate(CabinId)} disabled={isDeleting}>
+      <button onClick={() => mutate(CabinId!)} disabled={isDeleting}>
         Delete
       </button>
     </TableRow>

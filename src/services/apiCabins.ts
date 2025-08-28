@@ -1,3 +1,4 @@
+import type { CabinProps } from "../features/cabins/CabinRow";
 import supabase from "./supabase";
 
 async function getCabins() {
@@ -8,6 +9,15 @@ async function getCabins() {
     throw new Error("cabins could not be loaded! ");
   }
   return data;
+}
+
+export async function createCabin(newCabin: CabinProps) {
+  const { data, error } = await supabase.from("cabins").insert([newCabin]);
+  if (error) {
+    //eslint-disable-next-line no-console
+    console.error(error);
+    throw new Error("cabins could not be created! ");
+  }
 }
 
 export async function deleteCabin(id: number) {
