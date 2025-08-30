@@ -13,7 +13,7 @@ import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
 function CreateCabinForm() {
-  const { handleSubmit, register, reset, getValues, formState } = useForm();
+  const { handleSubmit, register, getValues, formState } = useForm();
   const { errors } = formState;
   const queryClient = useQueryClient();
 
@@ -22,13 +22,18 @@ function CreateCabinForm() {
     onSuccess: () => {
       toast.success("Cabin created successfully ");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      reset();
+
+      //do this way coz reset from react-form-hook create problem
+      const form = document.querySelector("form") as HTMLFormElement;
+      if (form) {
+        form.reset();
+      }
     },
     onError: (err) => toast.error(err.message),
   });
 
   function onSubmit(data: CabinProps): void {
-    mutate(data);
+    mutate({ ...data, image: data.image[0] });
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>
@@ -74,7 +79,7 @@ function CreateCabinForm() {
           id="discount"
           {...register("discount", {
             required: "This field is required",
-            validate: (value) =>
+            validate: (value: number) =>
               value <= getValues().regularPrice ||
               "Discount should be less than regularPrice",
           })}
@@ -93,15 +98,18 @@ function CreateCabinForm() {
       </FormRow>
 
       <FormRow label="Cabin photo" error={errors?.image?.message}>
-        <FileInput id="image" accept="image/*" />
+        <FileInput
+          id="image"
+          type="file"
+          accept="image/*"
+          {...register("image", { required: "This field is required" })}
+        />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
         <div>
-          <Button variation="secondary" type="reset" id="reset">
-            Cancel
-          </Button>
+          <Button variation="secondary">Cancel</Button>
           <Button disabled={isCreating}>Add cabin</Button>
         </div>
       </FormRow>
