@@ -2,8 +2,6 @@ import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
-
-import { createCabin } from "../../services/apiCabins";
 import type { CabinProps } from "./CabinRow";
 
 import Input from "../../ui/Input";
@@ -12,16 +10,22 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
+import { editCabin } from "../../services/apiCabins";
 
-function CreateCabinForm() {
-  const { handleSubmit, register, getValues, formState } = useForm();
+function EditCabin({ cabintoEdit }) {
+  const isEditSession = Boolean(cabintoEdit?.id);
+
+  const { handleSubmit, register, getValues, formState } = useForm({
+    defaultValues: isEditSession ? cabintoEdit : {},
+  });
+
   const { errors } = formState;
   const queryClient = useQueryClient();
 
-  const { isPending: isCreating, mutate } = useMutation({
-    mutationFn: createCabin,
+  const { isPending: isEditing, mutate } = useMutation({
+    mutationFn: editCabin,
     onSuccess: () => {
-      toast.success("Cabin created successfully ");
+      toast.success("Cabin edited successfully ");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
 
       //do this way coz reset from react-form-hook create problem
@@ -103,7 +107,9 @@ function CreateCabinForm() {
           id="image"
           type="file"
           accept="image/*"
-          {...register("image", { required: "This field is required" })}
+          {...register("image", {
+            required: false,
+          })}
         />
       </FormRow>
 
@@ -111,11 +117,11 @@ function CreateCabinForm() {
         {/* type is an HTML attribute! */}
         <div>
           <Button variation="secondary">Cancel</Button>
-          <Button disabled={isCreating}>Create new cabin</Button>
+          <Button disabled={isEditing}>Edit Cabin</Button>
         </div>
       </FormRow>
     </Form>
   );
 }
 
-export default CreateCabinForm;
+export default EditCabin;
