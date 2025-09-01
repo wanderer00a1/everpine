@@ -38,7 +38,7 @@ function EditCabin({ cabintoEdit }) {
   });
 
   function onSubmit(data: CabinProps): void {
-    mutate({ ...data, image: data.image[0] });
+    mutate(data);
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>
@@ -116,7 +116,9 @@ function EditCabin({ cabintoEdit }) {
       <FormRow>
         {/* type is an HTML attribute! */}
         <div>
-          <Button variation="secondary">Cancel</Button>
+          <Button variation="secondary" type="reset">
+            Cancel
+          </Button>
           <Button disabled={isEditing}>Edit Cabin</Button>
         </div>
       </FormRow>
