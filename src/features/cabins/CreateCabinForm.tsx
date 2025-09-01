@@ -1,9 +1,6 @@
-import toast from "react-hot-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
+import { useCreateCabin } from "./useCreateCabin";
 
-import { createCabin } from "../../services/apiCabins";
 import type { CabinProps } from "./CabinRow";
 
 import Input from "../../ui/Input";
@@ -14,27 +11,20 @@ import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
 function CreateCabinForm() {
-  const { handleSubmit, register, getValues, formState } = useForm();
+  const { createCabin, isCreating } = useCreateCabin();
+
+  const { handleSubmit, register, getValues, formState, reset } = useForm();
   const { errors } = formState;
-  const queryClient = useQueryClient();
-
-  const { isPending: isCreating, mutate } = useMutation({
-    mutationFn: createCabin,
-    onSuccess: () => {
-      toast.success("Cabin created successfully ");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-
-      //do this way coz reset from react-form-hook create problem
-      const form = document.querySelector("form") as HTMLFormElement;
-      if (form) {
-        form.reset();
-      }
-    },
-    onError: (err) => toast.error(err.message),
-  });
 
   function onSubmit(data: CabinProps): void {
-    mutate({ ...data, image: data.image[0] });
+    createCabin(
+      { ...data, image: data.image[0] },
+      {
+        onSuccess: () => {
+          reset();
+        },
+      }
+    );
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>

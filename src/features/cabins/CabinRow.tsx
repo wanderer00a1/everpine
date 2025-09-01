@@ -61,6 +61,8 @@ const NotDiscount = styled.div`
 `;
 
 function CabinRow({ cabin }: { cabin: CabinProps }) {
+  const { isDeleting, deleteCabin } = useDeleteCabin();
+  
   const [showForm, setShowForm] = useState(false);
 
   const {
@@ -71,8 +73,6 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
     regularPrice,
     discount,
   } = cabin;
-
-  const { isDeleting, deleteCabin } = useDeleteCabin();
 
   return (
     <>
