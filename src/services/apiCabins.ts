@@ -59,18 +59,29 @@ export async function editCabin(newCabin: any) {
     .single();
 
   if (fetchError) {
-    console.log(newCabin);
     throw new Error("Could not fetch old cabin data");
   }
 
   const oldImagePath = oldCabin.image;
-  const isExistingImage =
-    typeof newCabin.image === "string" &&
-    newCabin.image.startsWith(supabaseUrl);
 
-  let imagePath = newCabin.image as string;
+  //default keeps oldOne
+  let imagePath = oldImagePath;
 
-  if (!isExistingImage) {
+  if (typeof newCabin.image === "string") {
+    if (
+      newCabin.image.startsWith(supabaseUrl) &&
+      newCabin.image.trim() !== ""
+    ) {
+      //keeps the existing image
+      imagePath = newCabin.image;
+    } else if (newCabin.image.trim() === "") {
+      //uploads nothing -> keept old path
+      imagePath = oldImagePath;
+    } else {
+      throw new Error("Invalid Image format");
+    }
+  } else if (newCabin.image instanceof File) {
+    //user uploads a new image
     const imageName = `${Math.random()}-${newCabin.image.name}`.replace(
       "/",
       ""
@@ -87,7 +98,7 @@ export async function editCabin(newCabin: any) {
 
   if (error) throw new Error("Cabin could not be updated");
 
-  if (!isExistingImage) {
+  if (newCabin.image instanceof File) {
     const imageName = imagePath.split("/").pop()!;
     const { error: storageError } = await supabase.storage
       .from("cabin-images")
