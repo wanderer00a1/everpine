@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { formatCurrency } from "../../utils/helpers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "../../services/apiCabins";
-import toast from "react-hot-toast";
 import { useState } from "react";
+
+import { formatCurrency } from "../../utils/helpers";
 import EditCabin from "./EditCabin";
+import { useDeleteCabin } from "./useDeleteCabin";
 
 export interface CabinProps {
   id?: number;
@@ -54,6 +53,13 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
+const NotDiscount = styled.div`
+  font-family: "Sono";
+  font-weight: 500;
+  color: var(--color-grey-700);
+  margin-left: 25%;
+`;
+
 function CabinRow({ cabin }: { cabin: CabinProps }) {
   const [showForm, setShowForm] = useState(false);
 
@@ -66,16 +72,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
     discount,
   } = cabin;
 
-  const queryClient = useQueryClient();
-
-  const { isPending: isDeleting, mutate } = useMutation({
-    mutationFn: deleteCabin,
-    onSuccess: () => {
-      toast.success("Cabin deleted successfully! ");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const { isDeleting, deleteCabin } = useDeleteCabin();
 
   return (
     <>
@@ -84,12 +81,16 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
         <Cabin>{name}</Cabin>
         <div>{maxCapacity} guests</div>
         <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>{formatCurrency(discount)}</Discount>
+        {discount ? (
+          <Discount>{formatCurrency(discount)}</Discount>
+        ) : (
+          <NotDiscount>&mdash;</NotDiscount>
+        )}
         <div>
           <button onClick={() => setShowForm((show) => !show)}>
             {showForm ? "Close" : "Edit"}
           </button>
-          <button onClick={() => mutate(CabinId!)} disabled={isDeleting}>
+          <button onClick={() => deleteCabin(CabinId!)} disabled={isDeleting}>
             Delete
           </button>
         </div>
