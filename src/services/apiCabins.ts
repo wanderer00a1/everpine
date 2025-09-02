@@ -16,38 +16,50 @@ async function getCabins() {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createCabin(newCabin: any) {
-  //create cabin
-  const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
-    "/",
-    ""
-  );
+  let imagePath: string;
+  let imageName: string | undefined;
+  let shouldUploadImage = false;
 
-  //https://lgmlkbrwgbzvfugwchsn.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg
-  const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+  if (
+    typeof newCabin.image === "string" &&
+    newCabin.image.startsWith(supabaseUrl)
+  ) {
+    // Using existing image URL
+    imagePath = newCabin.image;
+    shouldUploadImage = false;
+  } else {
+    // New image file to upload
+    imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll("/", "");
+    imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+    shouldUploadImage = true;
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error }: { data: any; error: unknown } = await supabase
     .from("cabins")
     .insert([{ ...newCabin, image: imagePath }]);
+
   if (error) {
-    //eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console
     console.error(error);
     throw new Error("cabins could not be created! ");
   }
 
-  //upload image
-  const { error: storageError } = await supabase.storage
-    .from("cabin-images")
-    .upload(imageName, newCabin.image);
+  // Upload image only if it's a new file
+  if (shouldUploadImage && imageName) {
+    const { error: storageError } = await supabase.storage
+      .from("cabin-images")
+      .upload(imageName, newCabin.image);
 
-  //Delete the cabin if there was error in uploading the image
-  if (storageError) {
-    await supabase.from("cabins").delete().eq("id", data!.id);
-    // eslint-disable-next-line no-console
-    console.error(storageError);
-    throw new Error(
-      "Cabin image could not be uploaded and cabin cannot be created"
-    );
+    // Delete the cabin if there was error in uploading the image
+    if (storageError) {
+      await supabase.from("cabins").delete().eq("id", data!.id);
+      // eslint-disable-next-line no-console
+      console.error(storageError);
+      throw new Error(
+        "Cabin image could not be uploaded and cabin cannot be created"
+      );
+    }
   }
 
   return data;
