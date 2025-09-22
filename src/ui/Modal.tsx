@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -48,3 +49,9 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+function Modal({ children }: { children: ReactNode }) {
+  return <StyledModal>{children}</StyledModal>;
+}
+
+export default Modal;

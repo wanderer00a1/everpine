@@ -9,8 +9,10 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
+import { useState, type FormEvent } from "react";
 
 function CreateCabinForm() {
+  const [isInvisible, setInvisible] = useState(false);
   const { createCabin, isCreating } = useCreateCabin();
 
   const { handleSubmit, register, getValues, formState, reset } = useForm();
@@ -26,6 +28,13 @@ function CreateCabinForm() {
       }
     );
   }
+  function CancelSubmit(e: FormEvent) {
+    e.preventDefault();
+    reset();
+    setInvisible(true);
+  }
+
+  if (isInvisible) return null;
   return (
     <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>
       <FormRow label="Cabin name" error={errors?.name?.message}>
@@ -100,7 +109,9 @@ function CreateCabinForm() {
       <FormRow>
         {/* type is an HTML attribute! */}
         <div>
-          <Button variation="secondary">Cancel</Button>
+          <Button variation="secondary" onClick={CancelSubmit}>
+            Cancel
+          </Button>
           <Button disabled={isCreating}>Create new cabin</Button>
         </div>
       </FormRow>
