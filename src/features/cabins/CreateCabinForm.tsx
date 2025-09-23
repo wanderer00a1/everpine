@@ -29,7 +29,10 @@ function CreateCabinForm({ onCloseModal }: { onCloseModal: () => void }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}
+      type="modal"
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -105,7 +108,7 @@ function CreateCabinForm({ onCloseModal }: { onCloseModal: () => void }) {
           <Button variation="secondary" onClick={() => onCloseModal?.()}>
             Cancel
           </Button>
-          <Button disabled={isCreating} >Create new cabin</Button>
+          <Button disabled={isCreating}>Create new cabin</Button>
         </div>
       </FormRow>
     </Form>

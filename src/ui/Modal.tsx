@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 
@@ -58,7 +59,7 @@ function Modal({
   children: ReactNode;
   onClose: () => void;
 }) {
-  return (
+  return createPortal(
     <Overlay>
       <StyledModal>
         <Button onClick={onClose}>
@@ -66,7 +67,8 @@ function Modal({
         </Button>
         <div>{children}</div>
       </StyledModal>
-    </Overlay>
+    </Overlay>,
+    document.body
   );
 }
 

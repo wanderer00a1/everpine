@@ -36,7 +36,7 @@ function EditCabinForm({
     });
   }
   return (
-    <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>
+    <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)} type="modal">
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
