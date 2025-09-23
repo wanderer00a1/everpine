@@ -6,7 +6,8 @@ import { HiOutlineX } from "react-icons/hi";
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
-import EditCabinForm from "./EditCabinForm";
+
+import EditCabin from "./EditCabin";
 
 export interface CabinProps {
   id?: number;
@@ -87,7 +88,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
       discount,
     });
   }
-
+  
   return (
     <>
       <TableRow role="row">
@@ -112,7 +113,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
           </button>
         </div>
       </TableRow>
-      {showForm && <EditCabinForm cabintoEdit={cabin} />}
+      {showForm && <EditCabin cabin={cabin} onCloseForm={() => setShowForm(false)}/>}
     </>
   );
 }
