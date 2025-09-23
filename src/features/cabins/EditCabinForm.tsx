@@ -1,7 +1,6 @@
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
-import { useCreateCabin } from "./useCreateCabin";
-
 import type { CabinProps } from "./CabinRow";
+import { useEditCabin } from "./useEditCabin";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -10,24 +9,32 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-function CreateCabinForm({ onCloseModal }: { onCloseModal: () => void }) {
-  const { createCabin, isCreating } = useCreateCabin();
+function EditCabinForm({
+  cabintoEdit,
+  onCloseModal,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cabintoEdit?: any;
+  onCloseModal?: () => void;
+}) {
+  const { isEditing, editCabin } = useEditCabin();
 
-  const { handleSubmit, register, getValues, formState, reset } = useForm();
+  const isEditSession = Boolean(cabintoEdit?.id);
+
+  const { handleSubmit, register, getValues, formState, reset } = useForm({
+    defaultValues: isEditSession ? cabintoEdit : {},
+  });
+
   const { errors } = formState;
 
   function onSubmit(data: CabinProps): void {
-    createCabin(
-      { ...data, image: data.image[0] },
-      {
-        onSuccess: () => {
-          reset();
-          onCloseModal?.();
-        },
-      }
-    );
+    editCabin(data, {
+      onSuccess: () => {
+        reset(data);
+        onCloseModal?.();
+      },
+    });
   }
-
   return (
     <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>
       <FormRow label="Cabin name" error={errors?.name?.message}>
@@ -95,21 +102,27 @@ function CreateCabinForm({ onCloseModal }: { onCloseModal: () => void }) {
           id="image"
           type="file"
           accept="image/*"
-          {...register("image", { required: "This field is required" })}
+          {...register("image", {
+            required: false,
+          })}
         />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
         <div>
-          <Button variation="secondary" onClick={() => onCloseModal?.()}>
+          <Button
+            variation="secondary"
+            type="reset"
+            onClick={() => onCloseModal?.()}
+          >
             Cancel
           </Button>
-          <Button disabled={isCreating} >Create new cabin</Button>
+          <Button disabled={isEditing}>Edit Cabin</Button>
         </div>
       </FormRow>
     </Form>
   );
 }
 
-export default CreateCabinForm;
+export default EditCabinForm;

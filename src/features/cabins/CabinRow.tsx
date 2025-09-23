@@ -4,9 +4,9 @@ import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { HiOutlineX } from "react-icons/hi";
 
 import { formatCurrency } from "../../utils/helpers";
-import EditCabin from "./EditCabin";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
+import EditCabinForm from "./EditCabinForm";
 
 export interface CabinProps {
   id?: number;
@@ -112,7 +112,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
           </button>
         </div>
       </TableRow>
-      {showForm && <EditCabin cabintoEdit={cabin} />}
+      {showForm && <EditCabinForm cabintoEdit={cabin} />}
     </>
   );
 }
