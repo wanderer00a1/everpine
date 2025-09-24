@@ -27,6 +27,7 @@ const Overlay = styled.div`
   transition: all 0.5s;
 `;
 
+
 const Button = styled.button`
   background: none;
   border: none;
