@@ -10,7 +10,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-function CreateCabinForm({ onCloseModal }: { onCloseModal: () => void }) {
+function CreateCabinForm({ onCloseModal }: { onCloseModal?: () => void }) {
   const { createCabin, isCreating } = useCreateCabin();
 
   const { handleSubmit, register, getValues, formState, reset } = useForm();
