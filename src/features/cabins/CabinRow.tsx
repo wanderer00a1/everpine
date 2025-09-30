@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
-import { HiOutlineX } from "react-icons/hi";
 
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
 
-import EditCabin from "./EditCabin";
+import Modal from "../../ui/Modal";
+import EditCabinForm from "./EditCabinForm";
 
 export interface CabinProps {
   id?: number;
@@ -88,7 +88,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
       discount,
     });
   }
-  
+
   return (
     <>
       <TableRow role="row">
@@ -105,15 +105,21 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
           <button onClick={handleDuplicate} disabled={isCreating}>
             <HiSquare2Stack />
           </button>
-          <button onClick={() => setShowForm((show) => !show)}>
-            {showForm ? <HiOutlineX /> : <HiPencil />}
-          </button>
+          <Modal>
+            <Modal.Open opens={`edit-cabin-${CabinId}`}>
+              <button>
+                <HiPencil />
+              </button>
+            </Modal.Open>
+            <Modal.Window name={`edit-cabin-${CabinId}`}>
+              <EditCabinForm cabintoEdit={cabin} />
+            </Modal.Window>
+          </Modal>
           <button onClick={() => deleteCabin(CabinId!)} disabled={isDeleting}>
             <HiTrash />
           </button>
         </div>
       </TableRow>
-      {showForm && <EditCabin cabin={cabin} onCloseForm={() => setShowForm(false)}/>}
     </>
   );
 }
