@@ -88,37 +88,35 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
   }
 
   return (
-    <>
-      <TableRow role="row">
-        <Img src={image} />
-        <Cabin>{name}</Cabin>
-        <div>{maxCapacity} guests</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        {discount ? (
-          <Discount>{formatCurrency(discount)}</Discount>
-        ) : (
-          <NotDiscount>&mdash;</NotDiscount>
-        )}
-        <div>
-          <button onClick={handleDuplicate} disabled={isCreating}>
-            <HiSquare2Stack />
-          </button>
-          <Modal>
-            <Modal.Open opens={`edit-cabin-${CabinId}`}>
-              <button>
-                <HiPencil />
-              </button>
-            </Modal.Open>
-            <Modal.Window name={`edit-cabin-${CabinId}`}>
-              <EditCabinForm cabintoEdit={cabin} />
-            </Modal.Window>
-          </Modal>
-          <button onClick={() => deleteCabin(CabinId!)} disabled={isDeleting}>
-            <HiTrash />
-          </button>
-        </div>
-      </TableRow>
-    </>
+    <TableRow role="row">
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>{maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      {discount ? (
+        <Discount>{formatCurrency(discount)}</Discount>
+      ) : (
+        <NotDiscount>&mdash;</NotDiscount>
+      )}
+      <div>
+        <button onClick={handleDuplicate} disabled={isCreating}>
+          <HiSquare2Stack />
+        </button>
+        <Modal>
+          <Modal.Open opens={`edit-cabin-${CabinId}`}>
+            <button>
+              <HiPencil />
+            </button>
+          </Modal.Open>
+          <Modal.Window name={`edit-cabin-${CabinId}`}>
+            <EditCabinForm cabintoEdit={cabin} />
+          </Modal.Window>
+        </Modal>
+        <button onClick={() => deleteCabin(CabinId!)} disabled={isDeleting}>
+          <HiTrash />
+        </button>
+      </div>
+    </TableRow>
   );
 }
 
