@@ -68,8 +68,6 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
   const { isCreating, createCabin } = useCreateCabin();
   const { isDeleting, deleteCabin } = useDeleteCabin();
 
-  const [showForm, setShowForm] = useState(false);
-
   const {
     id: CabinId,
     name,
