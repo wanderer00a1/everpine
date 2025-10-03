@@ -2,6 +2,7 @@ import {
   cloneElement,
   createContext,
   useContext,
+  useRef,
   useState,
   type ReactElement,
   type ReactNode,
@@ -101,10 +102,19 @@ function Window({ children, name }: ModalT) {
     throw new Error("Open must be used within a Modal");
   }
   const { openName, close } = context;
+
+  const ref = useRef<HTMLDivElement>(null);
   if (name != openName) return null;
+
+  function closeModal(e: React.MouseEvent<HTMLDivElement>) {
+    if (!ref.current!.contains(e.target as Node)) {
+      close?.();
+    }
+  }
+
   return createPortal(
-    <Overlay>
-      <StyledModal>
+    <Overlay onClick={(e) => closeModal(e)}>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark />
         </Button>

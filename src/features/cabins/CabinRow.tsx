@@ -8,6 +8,7 @@ import { useCreateCabin } from "./useCreateCabin";
 
 import Modal from "../../ui/Modal";
 import EditCabinForm from "./EditCabinForm";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 export interface CabinProps {
   id?: number;
@@ -102,6 +103,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
         <button onClick={handleDuplicate} disabled={isCreating}>
           <HiSquare2Stack />
         </button>
+
         <Modal>
           <Modal.Open opens={`edit-cabin-${CabinId}`}>
             <button>
@@ -112,9 +114,21 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
             <EditCabinForm cabintoEdit={cabin} />
           </Modal.Window>
         </Modal>
-        <button onClick={() => deleteCabin(CabinId!)} disabled={isDeleting}>
-          <HiTrash />
-        </button>
+
+        <Modal>
+          <Modal.Open opens="delete">
+            <button>
+              <HiTrash />
+            </button>
+          </Modal.Open>
+          <Modal.Window name="delete">
+            <ConfirmDelete
+              resourceName="cabins"
+              onConfirm={() => deleteCabin(CabinId!)}
+              disabled={isDeleting}
+            />
+          </Modal.Window>
+        </Modal>
       </div>
     </TableRow>
   );
