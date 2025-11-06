@@ -1,9 +1,17 @@
-import { createContext, useContext, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import styled from "styled-components";
+import type { CabinProps } from "../features/cabins/CabinRow";
 
 interface TableI {
   columns?: string;
   children?: ReactNode;
+  data?: CabinProps[] | undefined;
+  render?: (cabin: CabinProps) => ReactElement;
 }
 
 const StyledTable = styled.div`
@@ -93,7 +101,10 @@ function Row({ children }: TableI) {
     </StyledRow>
   );
 }
-function Body({ children }: TableI) {}
+function Body({ data, render }: TableI) {
+  if (!data?.length) return <Empty>No data to show at the moment</Empty>;
+  return <StyledBody>{data.map(render!)}</StyledBody>;
+}
 
 Table.Header = Header;
 Table.Body = Body;
