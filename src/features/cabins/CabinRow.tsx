@@ -135,15 +135,11 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
           <Menus.Toggle id={CabinId} />
           <Menus.List id={CabinId}>
             <>
-              <Menus.Button>
-                <span>Duplicate</span>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+                Duplicate
               </Menus.Button>
-              <Menus.Button>
-                <span>Edit</span>
-              </Menus.Button>
-              <Menus.Button>
-                <span>Delete</span>
-              </Menus.Button>
+              <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
             </>
           </Menus.List>
         </Menus.Menu>

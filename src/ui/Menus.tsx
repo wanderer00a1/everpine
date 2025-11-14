@@ -1,4 +1,12 @@
-import { createContext, useContext, useState, type ReactElement } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  type Dispatch,
+  type ReactElement,
+  type ReactNode,
+  type SetStateAction,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
@@ -68,21 +76,33 @@ interface MenuContextType {
   open?: (id: number) => void;
   close?: () => void;
   openId?: number | null;
+  position?: pos | null;
+  setPosition?: Dispatch<SetStateAction<pos | null>>;
 }
 
 interface MenuT {
-  children?: ReactElement;
+  children?: ReactElement | ReactNode;
   id?: number;
+  onClick?: () => void;
+  icon?: ReactElement | ReactNode;
+}
+
+interface pos {
+  x: number;
+  y: number;
 }
 
 const MenusContext = createContext<MenuContextType | undefined>(undefined);
 
 function Menus({ children }: MenuT) {
   const [openId, setOpenId] = useState<number | null>(null);
+  const [position, setPosition] = useState<pos | null>(null);
   const close = () => setOpenId(0);
   const open = setOpenId;
   return (
-    <MenusContext.Provider value={{ openId, close, open }}>
+    <MenusContext.Provider
+      value={{ openId, close, open, position, setPosition }}
+    >
       {children}
     </MenusContext.Provider>
   );
@@ -93,8 +113,18 @@ function Toggle({ id }: MenuT) {
   if (!context) {
     throw new Error("Context must be used within Menu");
   }
-  const { openId, open, close } = context;
-  function handleClick() {
+  const { openId, open, close, setPosition } = context;
+
+  function handleClick(e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    const rect = target?.closest("button")?.getBoundingClientRect();
+
+    setPosition!({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+      x: window.innerWidth - rect?.width! - rect?.x!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+      y: rect?.y! + rect?.height! + 8,
+    });
     if (openId === null || openId !== id) {
       open?.(id!);
     } else {
@@ -113,18 +143,31 @@ function List({ id, children }: MenuT) {
   if (!context) {
     throw new Error("Context must be used within Menu");
   }
-  const { openId } = context;
+  const { openId, position } = context;
+
   if (openId !== id) return null;
   return createPortal(
-    <StyledList position={{ x: 20, y: 20 }}>{children} </StyledList>,
+    <StyledList position={position}>{children} </StyledList>,
     document.body
   );
 }
 
-function Button({ children }: MenuT) {
+function Button({ children, onClick, icon }: MenuT) {
+  const context = useContext(MenusContext);
+  if (!context) {
+    throw new Error("Context must used within Menu");
+  }
+  const { close } = context;
+  function handleClick() {
+    onClick?.();
+    close?.();
+  }
   return (
     <li>
-      <StyledButton>{children}</StyledButton>
+      <StyledButton onClick={handleClick}>
+        {icon}
+        <span>{children}</span>
+      </StyledButton>
     </li>
   );
 }
