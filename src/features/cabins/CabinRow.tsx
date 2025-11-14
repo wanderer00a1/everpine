@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 
 import { formatCurrency } from "../../utils/helpers";
@@ -10,6 +9,7 @@ import Modal from "../../ui/Modal";
 import EditCabinForm from "./EditCabinForm";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
+import Menus from "../../ui/Menus";
 
 export interface CabinProps {
   id?: number;
@@ -130,6 +130,23 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
             />
           </Modal.Window>
         </Modal>
+
+        <Menus.Menu>
+          <Menus.Toggle id={CabinId} />
+          <Menus.List id={CabinId}>
+            <>
+              <Menus.Button>
+                <span>Duplicate</span>
+              </Menus.Button>
+              <Menus.Button>
+                <span>Edit</span>
+              </Menus.Button>
+              <Menus.Button>
+                <span>Delete</span>
+              </Menus.Button>
+            </>
+          </Menus.List>
+        </Menus.Menu>
       </div>
     </Table.Row>
   );

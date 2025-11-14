@@ -1,6 +1,9 @@
+import { createContext, useContext, useState, type ReactElement } from "react";
+import { createPortal } from "react-dom";
+import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 
-const StyledMenu = styled.div`
+const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -25,7 +28,7 @@ const StyledToggle = styled.button`
   }
 `;
 
-const StyledList = styled.ul`
+const StyledList = styled.ul<any>`
   position: fixed;
 
   background-color: var(--color-grey-0);
@@ -60,3 +63,77 @@ const StyledButton = styled.button`
     transition: all 0.3s;
   }
 `;
+
+interface MenuContextType {
+  open?: (id: number) => void;
+  close?: () => void;
+  openId?: number | null;
+}
+
+interface MenuT {
+  children?: ReactElement;
+  id?: number;
+}
+
+const MenusContext = createContext<MenuContextType | undefined>(undefined);
+
+function Menus({ children }: MenuT) {
+  const [openId, setOpenId] = useState<number | null>(null);
+  const close = () => setOpenId(0);
+  const open = setOpenId;
+  return (
+    <MenusContext.Provider value={{ openId, close, open }}>
+      {children}
+    </MenusContext.Provider>
+  );
+}
+
+function Toggle({ id }: MenuT) {
+  const context = useContext(MenusContext);
+  if (!context) {
+    throw new Error("Context must be used within Menu");
+  }
+  const { openId, open, close } = context;
+  function handleClick() {
+    if (openId === null || openId !== id) {
+      open?.(id!);
+    } else {
+      close?.();
+    }
+  }
+  return (
+    <StyledToggle onClick={handleClick}>
+      <HiEllipsisVertical />
+    </StyledToggle>
+  );
+}
+
+function List({ id, children }: MenuT) {
+  const context = useContext(MenusContext);
+  if (!context) {
+    throw new Error("Context must be used within Menu");
+  }
+  const { openId } = context;
+  if (openId !== id) return null;
+  return createPortal(
+    <StyledList position={{ x: 20, y: 20 }}>{children} </StyledList>,
+    document.body
+  );
+}
+
+function Button({ children }: MenuT) {
+  return (
+    <li>
+      <StyledButton>{children}</StyledButton>
+    </li>
+  );
+}
+
+Menus.Menu = Menu;
+Menus.Toggle = Toggle;
+
+Menus.List = List;
+
+Menus.Button = Button;
+
+export default Menus;
