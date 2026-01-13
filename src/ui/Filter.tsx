@@ -51,17 +51,23 @@ interface filterProp {
   options?: optionsProp[];
 }
 
-//more reusable
+//reusable comp
 function Filter({ filterField, options }: filterProp) {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentFilter = searchParams.get(filterField!) || options?.at(0)?.value;
   function handleClick(value: string) {
     searchParams.set(filterField!, value);
+
     setSearchParams(searchParams);
   }
   return (
     <StyledFilter>
       {options?.map((option) => (
-        <FilterButton onClick={() => handleClick(option.value)}>
+        <FilterButton
+          onClick={() => handleClick(option.value)}
+          active={option.value === currentFilter}
+        >
           {option.label}
         </FilterButton>
       ))}

@@ -14,12 +14,11 @@ function CabinTable() {
   if (isPending) return <Spinner />;
 
   const filterValue: string = searchParams.get("discount") || "all";
-
   let filteredCabins;
   if (filterValue === "all") filteredCabins = cabins;
   if (filterValue === "no-discount")
     filteredCabins = cabins!.filter((cabin) => cabin.discount === 0);
-  if (filterValue === "discount")
+  if (filterValue === "with-discount")
     filteredCabins = cabins!.filter((cabin) => cabin.discount > 0);
 
   return (
