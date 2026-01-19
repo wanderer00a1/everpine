@@ -66,6 +66,7 @@ function Filter({ filterField, options }: filterProp) {
       {options?.map((option) => (
         <FilterButton
           onClick={() => handleClick(option.value)}
+          key={option.value}
           active={option.value === currentFilter}
         >
           {option.label}
