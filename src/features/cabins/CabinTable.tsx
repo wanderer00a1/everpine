@@ -13,6 +13,7 @@ function CabinTable() {
 
   if (isPending) return <Spinner />;
 
+  //filter
   const filterValue: string = searchParams.get("discount") || "all";
   let filteredCabins;
   if (filterValue === "all") filteredCabins = cabins;
@@ -20,6 +21,26 @@ function CabinTable() {
     filteredCabins = cabins!.filter((cabin) => cabin.discount === 0);
   if (filterValue === "with-discount")
     filteredCabins = cabins!.filter((cabin) => cabin.discount > 0);
+
+  //Sort
+  const sortBy = searchParams.get("sortBy") || "created_at-asc";
+  const [field, direction] = sortBy.split("-");
+
+  switch (field) {
+    case "name":
+      filteredCabins?.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "regularPrice":
+      filteredCabins?.sort((a, b) => a.regularPrice - b.regularPrice);
+      break;
+    case "maxCapacity":
+      filteredCabins?.sort((a, b) => a.maxCapacity - b.maxCapacity);
+      break;
+    default:
+      break;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  direction === "asc" ? filteredCabins : filteredCabins?.reverse();
 
   return (
     <Menus>

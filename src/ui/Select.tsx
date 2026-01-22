@@ -1,6 +1,14 @@
 import styled from "styled-components";
+import type { optionsProp } from "./SortBy";
+import type { ChangeEvent } from "react";
 
-const StyledSelect = styled.select`
+interface SelectI {
+  onChange?: (e: ChangeEvent) => void;
+  type?: string;
+  options?: optionsProp[];
+  value?: string;
+}
+const StyledSelect = styled.select<SelectI>`
   font-size: 1.4rem;
   padding: 0.8rem 1.2rem;
   border: 1px solid
@@ -13,3 +21,17 @@ const StyledSelect = styled.select`
   font-weight: 500;
   box-shadow: var(--shadow-sm);
 `;
+
+function Select({ options, value, onChange, ...props }: SelectI) {
+  return (
+    <StyledSelect value={value} onChange={onChange} {...props}>
+      {options!.map((option) => (
+        <option value={option.value} key={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </StyledSelect>
+  );
+}
+
+export default Select;
