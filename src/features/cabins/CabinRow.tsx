@@ -13,11 +13,11 @@ import Menus from "../../ui/Menus";
 
 export interface CabinProps {
   id?: number;
-  name: string;
-  image: string;
-  maxCapacity: number;
-  regularPrice: number;
-  discount: number;
+  name?: string;
+  image?: string;
+  maxCapacity?: number;
+  regularPrice?: number;
+  discount?: number;
 }
 
 // const TableRow = styled.div`
@@ -94,7 +94,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
       <Img src={image} />
       <Cabin>{name}</Cabin>
       <div>{maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
+      <Price>{formatCurrency(regularPrice!)}</Price>
       {discount ? (
         <Discount>{formatCurrency(discount)}</Discount>
       ) : (

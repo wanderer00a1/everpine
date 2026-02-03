@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 
@@ -6,6 +7,10 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+
+import type { CabinProps } from "../cabins/CabinRow";
+
+type BookingStatus = "unconfirmed" | "checked-in" | "checked-out";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -34,20 +39,40 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
+export interface bookingProp {
+  id?: string;
+  created_at?: string;
+  startDate?: string;
+  endDate?: string;
+  numNights?: string;
+  numGuests?: string;
+  totalPrice?: number;
+  status?: BookingStatus;
+  guests: {
+    fullName: string;
+    email: string;
+  };
+  cabins: CabinProps;
+}
+
+export interface bookingsProps {
+  booking: bookingProp;
+}
+
 function BookingRow({
   booking: {
     id: bookingId,
     created_at,
-    startDate,
-    endDate,
+    startDate = "",
+    endDate = "",
     numNights,
     numGuests,
-    totalPrice,
-    status,
+    totalPrice = 0,
+    status = "unconfirmed",
     guests: { fullName: guestName, email },
     cabins: { name: cabinName },
   },
-}) {
+}: bookingsProps) {
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
