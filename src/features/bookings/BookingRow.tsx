@@ -39,7 +39,7 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-export interface bookingProp {
+export interface BookingProp {
   id?: string;
   created_at?: string;
   startDate?: string;
@@ -48,19 +48,21 @@ export interface bookingProp {
   numGuests?: string;
   totalPrice?: number;
   status?: BookingStatus;
-  guests: {
-    fullName: string;
-    email: string;
-  };
+  guests:
+    | {
+        fullName?: string;
+        email?: string;
+      }
+    | null;
   cabins: CabinProps;
 }
 
-export interface bookingsProps {
-  booking: bookingProp;
+export interface BookingsProps {
+  booking: BookingProp;
 }
 
-function BookingRow({
-  booking: {
+function BookingRow({ booking }: BookingsProps) {
+  const {
     id: bookingId,
     created_at,
     startDate = "",
@@ -69,15 +71,18 @@ function BookingRow({
     numGuests,
     totalPrice = 0,
     status = "unconfirmed",
-    guests: { fullName: guestName, email },
     cabins: { name: cabinName },
-  },
-}: bookingsProps) {
+    guests,
+  } = booking;
+
+  const guestName = guests?.fullName ?? "Unknown guest";
+  const email = guests?.email ?? "—";
+
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
     "checked-out": "silver",
-  };
+  } as const;
 
   return (
     <Table.Row>
@@ -101,7 +106,9 @@ function BookingRow({
         </span>
       </Stacked>
 
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+      <Tag type={statusToTagName[status]}>
+        {status.replace("-", " ")}
+      </Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
     </Table.Row>
