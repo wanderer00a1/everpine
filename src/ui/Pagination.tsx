@@ -109,5 +109,4 @@ function Pagination({ count }) {
   );
 }
 
-
 export default Pagination;
