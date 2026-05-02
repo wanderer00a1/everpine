@@ -1,11 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
+import { useSearchParams } from "react-router";
 
 export function useBookings() {
-  const {
-    isPending,
-    data: bookings,
-    error,
-  } = useQuery({ queryKey: ["bookings"], queryFn: getBookings });
-  return { isPending, bookings, error };
+  const [searchParams] = useSearchParams();
+
+  const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+
+  const { isPending, data, error } = useQuery({
+    queryKey: ["bookings", page],
+    queryFn: () => getBookings({ page }),
+  });
+
+  const bookings = data?.data;
+  const count = data?.count;
+
+  return { isPending, bookings, error, count };
 }
