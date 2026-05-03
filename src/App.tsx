@@ -13,6 +13,7 @@ import AppLayout from "./ui/AppLayout";
 import GlobalStyles from "./styles/GlobalStyles";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
+import Booking from "./pages/Booking";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,10 @@ function App() {
         {
           path: "/bookings",
           element: <Bookings />,
+        },
+        {
+          path: "/bookings/:bookingId",
+          element: <Booking />,
         },
         {
           path: "/cabins",
