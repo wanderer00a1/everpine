@@ -7,7 +7,7 @@ import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
-import FormRow from "../../ui/FormRow";
+import FormRow from "../../ui/FormRowVertical";
 
 function EditCabinForm({
   cabintoEdit,
@@ -36,7 +36,10 @@ function EditCabinForm({
     });
   }
   return (
-    <Form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)} type="modal">
+    <Form
+      onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}
+      type="modal"
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"

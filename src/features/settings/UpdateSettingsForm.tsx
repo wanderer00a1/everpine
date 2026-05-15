@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
+import FormRow from "../../ui/FormRowVertical";
 import Input from "../../ui/Input";
 import Spinner from "../../ui/Spinner";
 import { useSettings } from "./useSettings";
@@ -20,7 +20,7 @@ function UpdateSettingsForm() {
   function handleUpdate(
     e: ChangeEvent<HTMLInputElement>,
     oldValue: number,
-    field: string
+    field: string,
   ) {
     const { value } = e.target;
     if (+value === +oldValue || !value) return;

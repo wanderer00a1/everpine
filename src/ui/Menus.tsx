@@ -83,9 +83,10 @@ interface MenuContextType {
 
 interface MenuT {
   children?: ReactElement | ReactNode;
-  id?: number ;
+  id?: number;
   onClick?: () => void;
   icon?: ReactElement | ReactNode;
+  disabled?: boolean;
 }
 
 interface pos {
@@ -144,17 +145,19 @@ function List({ id, children }: MenuT) {
   if (!context) {
     throw new Error("Context must be used within Menu");
   }
-  const { openId, position,close } = context;
+  const { openId, position, close } = context;
   const ref = useOutsideClick(close!);
 
   if (openId !== id) return null;
   return createPortal(
-    <StyledList position={position} ref={ref}>{children} </StyledList>,
-    document.body
+    <StyledList position={position} ref={ref}>
+      {children}{" "}
+    </StyledList>,
+    document.body,
   );
 }
 
-function Button({ children, onClick, icon }: MenuT) {
+function Button({ children, onClick, icon, disabled }: MenuT) {
   const context = useContext(MenusContext);
   if (!context) {
     throw new Error("Context must used within Menu");
@@ -166,7 +169,7 @@ function Button({ children, onClick, icon }: MenuT) {
   }
   return (
     <li>
-      <StyledButton onClick={handleClick}>
+      <StyledButton onClick={handleClick} disabled={disabled}>
         {icon}
         <span>{children}</span>
       </StyledButton>
