@@ -4,6 +4,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRowVertical";
 import Input from "../../ui/Input";
 import useSignUp from "./useSignUp";
+import type { AuthI } from "../../services/apiAuth";
 
 // Email regex: /\S+@\S+\.\S+/
 
@@ -13,11 +14,11 @@ function SignupForm() {
 
   const { signUp, isPending } = useSignUp();
 
-  function onsubmit({ fullName, email, password }) {
+  function onsubmit({ fullName, email, password }: AuthI) {
     signUp({ fullName, email, password }, { onSettled: () => reset() });
   }
   return (
-    <Form onSubmit={handleSubmit(onsubmit)}>
+    <Form onSubmit={handleSubmit(onsubmit)} autoComplete="off">
       <FormRow label="Full name" error={errors?.fullName?.message}>
         <Input
           type="text"
@@ -76,7 +77,12 @@ function SignupForm() {
       <FormRow>
         {/* type is an HTML attribute! */}
         <>
-          <Button variation="secondary" type="reset" disabled={isPending}>
+          <Button
+            variation="secondary"
+            type="reset"
+            disabled={isPending}
+            onClick={reset}
+          >
             Cancel
           </Button>
           <Button disabled={isPending}>Create new user</Button>
