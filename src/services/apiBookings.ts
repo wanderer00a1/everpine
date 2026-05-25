@@ -46,7 +46,7 @@ export async function getBookings({
   return { data, count };
 }
 
-export async function getBooking(id) {
+export async function getBooking(id: string | undefined) {
   const { data, error } = await supabase
     .from("bookings")
     .select("*, cabins(*), guests(*)")
@@ -115,7 +115,7 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-export async function updateBooking(id, obj) {
+export async function updateBooking(id: number, obj: { status: string }) {
   const { data, error } = await supabase
     .from("bookings")
     .update(obj)
@@ -130,7 +130,7 @@ export async function updateBooking(id, obj) {
   return data;
 }
 
-export async function deleteBooking(id) {
+export async function deleteBooking(id: any) {
   // REMEMBER RLS POLICIES
   const { data, error } = await supabase.from("bookings").delete().eq("id", id);
 

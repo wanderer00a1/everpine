@@ -61,7 +61,7 @@ export interface BookingProp {
   numGuests?: string;
   totalPrice?: number;
   status?: BookingStatus;
-  guests: {
+  guests?: {
     fullName?: string;
     email?: string;
   } | null;
