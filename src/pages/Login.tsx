@@ -6,6 +6,7 @@ import { useUser } from "../features/authentication/useUser";
 import { useNavigate } from "react-router";
 import SpinnerMini from "../ui/SpinnerMini";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const LoginLayout = styled.main`
   min-height: 100vh;
@@ -20,10 +21,13 @@ const LoginLayout = styled.main`
 function Login() {
   const navigate = useNavigate();
   const { isAuthenticated, isPending: userLoading } = useUser();
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
   if (userLoading) return <SpinnerMini />;
-  if (isAuthenticated) {
-    navigate("/");
-  }
+
   return (
     <LoginLayout>
       <Logo />

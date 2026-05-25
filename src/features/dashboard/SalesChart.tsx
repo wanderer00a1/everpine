@@ -58,7 +58,10 @@ function SalesChart({ bookings, numDays }: any) {
   });
   return (
     <StyledSalesChart>
-      <Heading as="h2">Sales</Heading>
+      <Heading as="h2">
+        Sales {"("} {format(allDates.at(0) ?? new Date(), "MMM dd yyyy")}{" "}
+        &mdash; {format(allDates.at(-1) ?? new Date(), "MMM dd yyyy")} {")"}
+      </Heading>
       <ResponsiveContainer height={300} width="100%">
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray="4" />
