@@ -104,6 +104,7 @@ function Window({ children, name }: ModalT) {
   const { openName, close } = context;
 
   const ref = useRef<HTMLDivElement>(null);
+  
   if (name != openName) return null;
 
   function closeModal(e: React.MouseEvent<HTMLDivElement>) {

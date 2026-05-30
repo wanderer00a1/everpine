@@ -17,6 +17,7 @@ import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
 import Protectedroute from "./ui/Protectedroute";
 import { DarkModeProvider } from "./context/DarkModeContext";
+import ErrorFallback from "./ui/ErrorFallback";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +36,7 @@ function App() {
           <AppLayout />
         </Protectedroute>
       ),
+      errorElement: <ErrorFallback />,
       children: [
         {
           path: "/",

@@ -25,7 +25,8 @@ const Guest = styled.div`
   font-weight: 500;
 `;
 
-function TodayItem({ activity }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function TodayItem({ activity }:any) {
   const { id, status, guests, numNights } = activity;
 
   return (

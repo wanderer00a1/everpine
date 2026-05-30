@@ -20,7 +20,8 @@ const Label = styled.span`
   }
 `;
 
-function DataItem({ icon, label, children }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function DataItem({ icon, label, children }:any) {
   return (
     <StyledDataItem>
       <Label>

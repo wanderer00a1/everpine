@@ -2,7 +2,8 @@
 import Button from "../../ui/Button";
 import { useCheckOut } from "./useCheckout";
 
-function CheckoutButton({ bookingId }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function CheckoutButton({ bookingId }:any) {
   const { checkout, isCheckingOut } = useCheckOut();
   return (
     <Button

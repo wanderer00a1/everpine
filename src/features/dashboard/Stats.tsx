@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   HiOutlineBanknotes,
   HiOutlineBriefcase,
@@ -10,11 +11,17 @@ import { formatCurrency } from "../../utils/helpers";
 function Stats({ bookings, confirmedStays, numDays, numCabins }: any) {
   const numBookings = bookings.length;
 
-  const sales = bookings.reduce((acc, cur) => acc + cur.totalPrice, 0);
+  const sales = bookings.reduce(
+    (acc: any, cur: { totalPrice: any }) => acc + cur.totalPrice,
+    0,
+  );
 
   const checkins = confirmedStays.length;
 
-  const occupancy = confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0);
+  const occupancy = confirmedStays.reduce(
+    (acc: any, cur: { numNights: any }) => acc + cur.numNights,
+    0,
+  );
   const totalOccupancy = numDays * numCabins;
   const occupancyRate = occupancy / totalOccupancy;
   return (

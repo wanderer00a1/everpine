@@ -22,11 +22,11 @@ function DashboardLayout() {
     numDays,
   } = useRecentBookings();
 
-  const { isPending: isLoadingStays, stays, confirmedStays } = useRecentStays();
+  const { isPending: isLoadingStays, confirmedStays } = useRecentStays();
 
   const { isPending: isLoading3, cabins } = useCabins();
 
-  if (isLoadingBookings || isLoadingStays) return <Spinner />;
+  if (isLoadingBookings || isLoadingStays || isLoading3) return <Spinner />;
 
   return (
     <StyledDashboardLayout>

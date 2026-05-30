@@ -10,7 +10,7 @@ function useLogin() {
   const { mutate: login, isPending } = useMutation({
     mutationFn: ({ email, password }: AuthI) => loginApi({ email, password }),
     onSuccess: (user) => {
-      queryClient.setQueriesData(["user"], user.user);
+      queryClient.setQueriesData({ queryKey: ["user"] }, user.user);
       navigate("/dashboard");
     },
     onError: (err) => {

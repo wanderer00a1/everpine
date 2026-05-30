@@ -9,8 +9,8 @@ import Pagination from "../../ui/Pagination";
 function BookingTable() {
   const { bookings, isPending, count } = useBookings();
 
-  if (isPending) return <Spinner />;
   if (!bookings?.length) return <Empty resource="bookings" />;
+  if (isPending) return <Spinner />;
 
   return (
     <Menus>
@@ -26,6 +26,7 @@ function BookingTable() {
 
         <Table.Body
           data={bookings}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           render={(booking: any) => (
             <BookingRow key={booking.id} booking={booking} />
           )}

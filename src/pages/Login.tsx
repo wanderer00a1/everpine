@@ -5,7 +5,6 @@ import Heading from "../ui/Heading";
 import { useUser } from "../features/authentication/useUser";
 import { useNavigate } from "react-router";
 import SpinnerMini from "../ui/SpinnerMini";
-import toast from "react-hot-toast";
 import { useEffect } from "react";
 
 const LoginLayout = styled.main`

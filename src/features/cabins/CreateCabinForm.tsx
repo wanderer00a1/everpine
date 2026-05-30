@@ -18,7 +18,7 @@ function CreateCabinForm({ onCloseModal }: { onCloseModal?: () => void }) {
 
   function onSubmit(data: CabinProps): void {
     createCabin(
-      { ...data, image: data.image[0] },
+      { ...data, image: data.image?.[0] ?? null },
       {
         onSuccess: () => {
           reset();

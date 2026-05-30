@@ -9,7 +9,8 @@ import type { AuthI } from "../../services/apiAuth";
 // Email regex: /\S+@\S+\.\S+/
 
 function SignupForm() {
-  const { register, formState, getValues, handleSubmit, reset } = useForm();
+  const { register, formState, getValues, handleSubmit, reset } =
+    useForm<AuthI>();
   const { errors } = formState;
 
   const { signUp, isPending } = useSignUp();
@@ -81,7 +82,7 @@ function SignupForm() {
             variation="secondary"
             type="reset"
             disabled={isPending}
-            onClick={reset}
+            onClick={() => reset()}
           >
             Cancel
           </Button>

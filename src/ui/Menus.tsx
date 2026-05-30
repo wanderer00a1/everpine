@@ -118,6 +118,7 @@ function Toggle({ id }: MenuT) {
   const { openId, open, close, setPosition } = context;
 
   function handleClick(e: React.MouseEvent) {
+    e.stopPropagation();
     const target = e.target as HTMLElement;
     const rect = target?.closest("button")?.getBoundingClientRect();
 
@@ -146,7 +147,8 @@ function List({ id, children }: MenuT) {
     throw new Error("Context must be used within Menu");
   }
   const { openId, position, close } = context;
-  const ref = useOutsideClick(close!);
+
+  const ref = useOutsideClick(close!, false);
 
   if (openId !== id) return null;
   return createPortal(

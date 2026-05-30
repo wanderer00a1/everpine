@@ -12,7 +12,8 @@ function UpdatePasswordForm() {
 
   const { updateUser, isUpdating } = useUpdateUser();
 
-  function onSubmit({ password }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function onSubmit({ password }:any) {
     updateUser({ password }, { onSuccess: () => reset() });
   }
 

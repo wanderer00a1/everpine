@@ -15,15 +15,18 @@ import { useNavigate } from "react-router";
 import { useCheckOut } from "../check-in-out/useCheckout";
 import { useDeleteBooking } from "./useDeleteBooking";
 import Modal from "../../ui/Modal";
-import Menus from "../../ui/Menus";
+
 import ConfirmDelete from "../../ui/ConfirmDelete";
-import { HiTrash } from "react-icons/hi2";
+
+import Empty from "../../ui/Empty";
 
 const HeadingGroup = styled.div`
   display: flex;
   gap: 2.4rem;
   align-items: center;
 `;
+
+type BookingStatus = "unconfirmed" | "checked-in" | "checked-out";
 
 function BookingDetail() {
   const { booking, isPending } = useBooking();
@@ -35,9 +38,13 @@ function BookingDetail() {
   const navigate = useNavigate();
 
   if (isPending) return <Spinner />;
+  if (!booking) return <Empty resource="booking" />;
 
-  const { status, id: bookingId } = booking;
-  const statusToTagName = {
+  const { status, id: bookingId } = booking as {
+    status: BookingStatus;
+    id: number;
+  };
+  const statusToTagName: Record<BookingStatus, string> = {
     unconfirmed: "blue",
     "checked-in": "green",
     "checked-out": "silver",
@@ -48,7 +55,9 @@ function BookingDetail() {
       <Row type="horizontal">
         <HeadingGroup>
           <Heading as="h1">Booking #{bookingId}</Heading>
-          <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+          <Tag type={statusToTagName[status as BookingStatus]}>
+            {status.replace("-", " ")}
+          </Tag>
         </HeadingGroup>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>

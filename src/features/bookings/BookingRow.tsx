@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 
@@ -19,7 +18,6 @@ import {
 import { useNavigate } from "react-router";
 import { useCheckOut } from "../check-in-out/useCheckout";
 import Modal from "../../ui/Modal";
-import { deleteBooking } from "../../services/apiBookings";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteBooking } from "./useDeleteBooking";
 
@@ -75,11 +73,9 @@ export interface BookingsProps {
 function BookingRow({ booking }: BookingsProps) {
   const {
     id: bookingId,
-    created_at,
     startDate = "",
     endDate = "",
     numNights,
-    numGuests,
     totalPrice = 0,
     status = "unconfirmed",
     cabins: { name: cabinName },
@@ -132,7 +128,6 @@ function BookingRow({ booking }: BookingsProps) {
             >
               Show details
             </Menus.Button>
-            
 
             {status === "unconfirmed" && (
               <Menus.Button

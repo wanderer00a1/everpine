@@ -11,7 +11,8 @@ export async function getSettings() {
 }
 
 // We expect a newSetting object that looks like {setting: newValue}
-export async function updateSetting(newSetting) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function updateSetting(newSetting:any) {
   const { data, error } = await supabase
     .from("settings")
     .update(newSetting)
